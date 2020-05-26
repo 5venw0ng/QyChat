@@ -16,17 +16,17 @@ public class EnterpriseParame {
 	/**
 	 *@desc 企业微信CORPID
 	 */
-	public static final String CORPID = "***REMOVED***";
+	public static final String CORPID = "企业微信CORPID";
 	
 	/**
 	 *@desc 企业微信SECRET
 	 */
-	public static final String SECRET = "***REMOVED***";
+	public static final String SECRET = "企业微信SECRET";
 	
 	/**
 	 *@desc 企业微信客户信息获取SECRET
 	 */
-	public static final String CUSTOMER_SECRET = "***REMOVED***";
+	public static final String CUSTOMER_SECRET = "企业微信CUSTOMER_SECRET";
 	
 	
 	
