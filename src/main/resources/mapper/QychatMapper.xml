@@ -2,7 +2,7 @@
 	<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 
 <mapper namespace="com.vocust.qywx.demo.dao.mapper.QychatMapper">
-	<resultMap id="QychatInfoMap" type="com.vocust.qywx.demo.dao.entity.User">
+	<resultMap id="QychatInfoMap" type="com.vocust.qywx.demo.dao.entity.Qychat">
 		<result column="seq" property="seq" />
 		<result column="msgid" property="msgid" />
 		<result column="publickey_ver" property="publickey_ver" />
