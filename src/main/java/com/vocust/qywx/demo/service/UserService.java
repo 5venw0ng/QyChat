@@ -17,4 +17,7 @@ public interface UserService {
 	
 	String getUsernameByUserid(String userId);
 
+	User getUserInfo(String userId);
+	User getToken();
+	int saveToken(String token,String tokentime);
 }

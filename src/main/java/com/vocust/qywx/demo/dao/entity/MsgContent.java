@@ -39,4 +39,7 @@ public class MsgContent {
 	private String chatrecord;// 消息内容。String类型
 	private String filename;//文件名称
 
+	private String fromDate;
+	private String thruDate;
+
 }

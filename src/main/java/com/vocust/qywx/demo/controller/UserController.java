@@ -1,10 +1,10 @@
 package com.vocust.qywx.demo.controller;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.util.*;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,23 +29,34 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 
-	@GetMapping("/queryAllUsers")
-	public List<User> queryAllUsers() {
-		return userService.queryAllUsers();
+	@RequestMapping(value="/queryAllUsers", method = RequestMethod.POST)
+	public PageResponse queryAllUsers() {
+        PageResponse pageResponse = new PageResponse();
+		List<User> users = userService.queryAllUsers();
+        pageResponse.setTotal(users.size());
+        pageResponse.setRes(users);
+        return pageResponse;
 	}
 
 	@RequestMapping(value = "/userLogin", method = RequestMethod.POST)
 	public Map<String, Object> userLogin(@RequestParam("account") String account,@RequestParam("password") String password) {
 		Map<String, Object> map = new HashMap<>();
-		if("admin".equals(account)&&"admin".equals(password))
+
+		if("admin".equals(account) && "21232F297A57A5A743894A0E4A801FC3".equalsIgnoreCase(DigestUtils.md5Hex(password)))
 		{
-			
+		    /**
 			User user = new User();
 			user.setUsername("admin");
 			user.setPassword("admin");
 			user.setAge(18);
 			map.put("loginUser", user);
+             **/
 			map.put("result", "yes");
+
+            SimpleDateFormat sdf  = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			String newToke = DigestUtils.md5Hex(sdf.format(new Date()));
+			userService.saveToken(newToke,sdf.format(new Date()));
+            map.put("token", newToke);
 		}else
 		{
 			map.put("result", "no");
@@ -73,9 +84,11 @@ public class UserController {
 		List<User> result = new  ArrayList<User>();
 		int i=0;
 		for (Object obj : idLst) {
-			User user =new User();
-			user.setUsername(userService.getUsernameByUserid(obj.toString()));
-			user.setId(i);
+			User user = userService.getUserInfo(obj.toString());
+
+			//user.setUsername(userService.getUsernameByUserid(obj.toString()));
+			//user.setId(i);
+			log.info("user:= " + user.toString());
 			result.add(user);
 			i++;
 		}

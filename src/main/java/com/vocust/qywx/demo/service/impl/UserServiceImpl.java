@@ -56,7 +56,40 @@ public class UserServiceImpl implements UserService {
 
 	}
 
-	private String analysisOuterCustomerData2(String data) {
+    @Override
+    public User getUserInfo(String userId) {
+        if(StringUtils.isEmpty(userId))
+            return null;
+        String userName = null;
+        User user = new User();
+        if (userId.startsWith("wb") || userId.startsWith("wo") || userId.startsWith("wm")) { // 外部联系人信息获取
+            //String data = msgContentService.getOuterCustomerDetails(userId);
+            //userName = analysisOuterCustomerData(data);
+        } else { // 内部部联系人信息获取
+            String data = msgContentService.getInnerCustomerDetails(userId);
+            JsonObject result = gson.fromJson(data, JsonObject.class);
+            if (result.get("errcode").getAsInt() != 0) {
+                log.info("解析异常 errcode" + result.get("errcode").getAsInt());
+            } else {
+                user.setUsername(result.get("name").getAsString());
+                user.setUserid(result.get("userid").getAsString());
+            }
+        }
+        return user;
+
+    }
+
+    @Override
+    public User getToken() {
+        return userMapper.getToken();
+    }
+
+    @Override
+    public int saveToken(String token,String tokentime) {
+        return userMapper.saveToken( token, tokentime);
+    }
+
+    private String analysisOuterCustomerData2(String data) {
 		String userName = null;
 		JsonObject result = gson.fromJson(data, JsonObject.class);
 		if (result.get("errcode").getAsInt() != 0) {
