@@ -221,7 +221,7 @@ public class QychatServiceImpl implements QychatService {
 			fileName = md5sum+ ".jpg";
 			break;
 		case "voice":
-			fileName = md5sum+ ".mp3";
+			fileName = md5sum+ ".amr";
 			break;
 		case "video":
 			fileName = md5sum+ ".mp4";
