@@ -65,7 +65,7 @@ public class QychatServiceImpl implements QychatService {
 	 * 每五分钟执行一次定时任务
 	 */
 	@Override
-	@Scheduled(cron = "0 */5 * * * ?")
+	//@Scheduled(cron = "0 */1 * * * ?")
 	public void initQychatData() {
 		QueryParam param = new QueryParam();
 		Integer seq = qychatMapper.getSeq() == null ? 0 : qychatMapper.getSeq();// 从第几条开始拉取
@@ -118,13 +118,15 @@ public class QychatServiceImpl implements QychatService {
 				msgcontent.setMsgtype(content.getString("msgtype"));
 				msgcontent.setText(isEmpty(content.getString("text")));
 				msgcontent.setImage(isEmpty(content.getString("image")));
+                msgcontent.setImage(isEmpty(content.getString("emotion")));
 				msgcontent.setWeapp(isEmpty(content.getString("weapp")));
 				msgcontent.setRedpacket(isEmpty(content.getString("redpacket")));
 				msgcontent.setFile(isEmpty(content.getString("file")));
 				msgcontent.setVideo(isEmpty(content.getString("video")));
 				msgcontent.setVoice(isEmpty(content.getString("voice")));
 				msgcontent.setChatrecord(isEmpty(content.getString("chatrecord")));
-				msgcontent.setFilename(getFileNameAndDownloadData(msgcontent));	
+				msgcontent.setFilename(getFileNameAndDownloadData(msgcontent));
+				log.info("这条记录原始content：" + content);
 			}else if(content.getString("action").equals("switch"))
 			{
 				log.info("switch 消息"+content);
@@ -213,6 +215,7 @@ public class QychatServiceImpl implements QychatService {
 	private String getFileName(JSONObject jsonObject, String fileType) {
 		String fileName = null;
 		String md5sum =jsonObject.getString("md5sum");
+		log.info("当前的聊天记录文件类型是：" + fileType + "，完整内容是：" + jsonObject.toString());
 		switch (fileType) {
 		case "image":
 			fileName = md5sum+ ".jpg";
@@ -226,6 +229,9 @@ public class QychatServiceImpl implements QychatService {
 		case "file":
 			fileName = jsonObject.getString("filename");
 			break;
+        case "emotion":
+            fileName = md5sum+ "." + (jsonObject.getString("type").equals("1") ? "gif" : "png");
+            break;
 		default:
 			fileName = "default.jpg";
 			break;

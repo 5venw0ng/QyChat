@@ -2,6 +2,7 @@ package com.vocust.qywx.demo.service;
 
 import java.util.Map;
 
+import com.vocust.qywx.demo.dao.entity.MsgContent;
 import com.vocust.qywx.demo.utils.page.PageBean;
 import com.vocust.qywx.demo.utils.page.PageParam;
 
@@ -14,10 +15,14 @@ import com.vocust.qywx.demo.utils.page.PageParam;
 
 public interface MsgContentService {
 
-	PageBean findAll(PageParam page);
+	PageBean findAllByUserid(PageParam page, MsgContent mc);
+
+	PageBean findMsgByUserid(PageParam page, MsgContent mc);
+
 
 	Map getMsgByIdAndType(int id, String msgtype);
-	
+
+
 	/**
 	 * 获取外部成员详细信息
 	 * @param extendsUserid

@@ -31,10 +31,60 @@
 		<result column="filename" property="filename" />
 	</resultMap>
 
-	<select id="findAll" resultMap="MsgContentInfoMap">
-		SELECT * FROM
-		<include refid="table" />
-		ORDER BY msgtime ASC limit #{pageNum},#{numPerPage}
+	<select id="findAllByUserid" resultMap="MsgContentInfoMap">
+		SELECT
+			tmsg.sender,
+			tmsg.fromView,
+			tmsg.tolistView,
+			tmsg.tolist,
+			tmsg.roomid,
+			MAX(tmsg.msgtime) msgtime
+		FROM
+			tbl_msgcontent tmsg
+		WHERE tmsg.action='send'
+		AND tmsg.sender=#{mc.from}
+		AND tmsg.tolist is not null
+		AND (tmsg.roomid = '' OR tmsg.roomid IS NULL)
+		GROUP BY tmsg.tolistView
+		ORDER BY tmsg.msgtime ASC limit #{page.pageNum},#{page.numPerPage}
+	</select>
+
+	<select id="findGroupByUserid" resultMap="MsgContentInfoMap">
+		SELECT
+			tmsg.sender,
+			tmsg.fromView,
+			MAX(tmsg.tolistView) tolistView,
+			MAX(tmsg.tolist) tolist,
+			tmsg.roomid,
+			MAX(tmsg.msgtime) msgtime
+		FROM
+			tbl_msgcontent tmsg
+		WHERE tmsg.action='send'
+		AND tmsg.sender=#{mc.from}
+		AND tmsg.tolist is not null
+		AND (tmsg.roomid &lt;&gt; '' AND tmsg.roomid IS NOT NULL)
+		GROUP BY tmsg.roomid
+		ORDER BY tmsg.msgtime ASC
+	</select>
+
+	<select id="findMsgByUserid" resultMap="MsgContentInfoMap">
+		SELECT
+			tmsg.*
+		FROM
+		tbl_msgcontent tmsg
+		WHERE tmsg.action='send'
+
+		<if test="mc.tolist != null &amp;&amp; mc.tolist != ''">
+			AND
+			((tmsg.sender=#{mc.from} AND tmsg.tolist = #{mc.tolist})
+			OR (tmsg.sender=replace(replace(#{mc.tolist},'["',''),'"]','') AND tmsg.tolist = concat('["',#{mc.from},'"]')))
+		</if>
+		<if test="mc.roomid != null &amp;&amp; mc.roomid != ''">AND tmsg.roomid = #{mc.roomid}</if>
+
+		<if test="mc.fromDate != null &amp;&amp; mc.fromDate != ''">AND FROM_UNIXTIME(tmsg.msgtime/1000,'%Y-%m-%d %H:%i:%s') &gt; #{mc.fromDate}</if>
+		<if test="mc.thruDate != null &amp;&amp; mc.thruDate != ''">AND FROM_UNIXTIME(tmsg.msgtime/1000,'%Y-%m-%d %H:%i:%s') &gt; #{mc.thruDate}</if>
+
+		ORDER BY tmsg.msgtime limit #{page.pageNum},#{page.numPerPage}
 	</select>
 
 	<select id="counts" resultType="java.lang.Integer">

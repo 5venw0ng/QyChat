@@ -35,17 +35,16 @@ public class MsgContentServiceImpl implements MsgContentService {
 	private static final Gson gson =new Gson();
 
 	@Override
-	public PageBean findAll(PageParam page) {
+	public PageBean findAllByUserid(PageParam page,MsgContent mc) {
 
 		PageBean pageBean = null;
 		try {
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("page", page);
-			List<MsgContent> msgList = msgContentMapper.findAll(page);
-			for (MsgContent msgContent : msgList) {
-				msgContent.setMsgtype(EnumMsgType.getName(msgContent.getMsgtype()));
+			List<MsgContent> msgList = msgContentMapper.findAllByUserid(page,mc);
+			List<MsgContent> groupmsgList = msgContentMapper.findGroupByUserid(mc);
+			msgList.addAll(groupmsgList);
 
-			}
 			pageBean = new PageBean(page.getPageNum(), page.getNumPerPage(), page.getCount(), msgList);
 			pageBean.setTotalCount(msgContentMapper.counts());
 		} catch (Exception e) {
@@ -53,6 +52,24 @@ public class MsgContentServiceImpl implements MsgContentService {
 		}
 		return pageBean;
 
+	}
+
+	@Override
+	public PageBean findMsgByUserid(PageParam page, MsgContent mc) {
+		PageBean pageBean = null;
+		try {
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("page", page);
+			List<MsgContent> msgList = msgContentMapper.findMsgByUserid(page,mc);
+			for (MsgContent msgContent : msgList) {
+				msgContent.setMsgtype(EnumMsgType.getName(msgContent.getMsgtype()));
+			}
+			pageBean = new PageBean(page.getPageNum(), page.getNumPerPage(), page.getCount(), msgList);
+			pageBean.setTotalCount(msgContentMapper.counts());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return pageBean;
 	}
 
 	@Override

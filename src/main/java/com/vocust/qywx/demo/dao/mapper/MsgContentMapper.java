@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.vocust.qywx.demo.dao.entity.MsgContent;
 import com.vocust.qywx.demo.utils.page.PageParam;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * @author hf
@@ -15,7 +16,11 @@ import com.vocust.qywx.demo.utils.page.PageParam;
 
 public interface MsgContentMapper {
 
-	List<MsgContent> findAll(PageParam page);
+	List<MsgContent> findAllByUserid(@Param("page") PageParam page, @Param("mc") MsgContent mc);
+
+	List<MsgContent> findGroupByUserid(@Param("mc") MsgContent mc);
+
+	List<MsgContent> findMsgByUserid(@Param("page") PageParam page,@Param("mc") MsgContent mc);
 	
 	int counts();
 	
