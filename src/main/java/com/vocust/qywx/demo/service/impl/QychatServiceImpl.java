@@ -18,6 +18,7 @@ import com.vocust.qywx.demo.service.QychatService;
 import com.vocust.qywx.demo.service.UserService;
 import com.vocust.qywx.demo.utils.EnterpriseParame;
 import com.vocust.qywx.demo.utils.RSAUtils;
+import it.sauronsoftware.jave.AudioUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -151,7 +152,7 @@ public class QychatServiceImpl implements QychatService {
 
 	}
 
-	
+
 	private String getGroupchatName(String roomid) {
 		if(StringUtils.isEmpty(roomid))
 			return null;
@@ -201,14 +202,15 @@ public class QychatServiceImpl implements QychatService {
 			String fileType = msgcontent.getMsgtype();
 			JSONObject jsonObject = JSONObject.parseObject(content);
 			String sdkfileid = jsonObject.getString("sdkfileid");
-			fileName =getFileName(jsonObject,fileType);
+			fileName = getFileName(jsonObject,fileType);
+
 			if (!StringUtils.isEmpty(sdkfileid) && null != fileName) {
 				downLodaFile(fileName, sdkfileid);
 			}
 		} catch (Exception e) {
 			log.info("下载文件出错" + e);
 		}
-		return fileName;
+		return fileName.substring(0, fileName.lastIndexOf(".")) + ".mp3";//返回的时候给MP3
 
 	}
 
@@ -269,6 +271,11 @@ public class QychatServiceImpl implements QychatService {
 				indexbuf = Finance.GetOutIndexBuf(media_data);
 				Finance.FreeMediaData(media_data);
 			}
+		}
+		if(fileName.contains(".amr")) {
+			File source = new File(filepath + fileName);
+			File target = new File(filepath + fileName.substring(0, fileName.lastIndexOf(".")) + ".mp3");
+			AudioUtils.amrToMp3(source, target);
 		}
 		log.info("下载完毕");
 		Finance.DestroySdk(sdk);

@@ -44,13 +44,13 @@ public class UserController {
 
 		if("admin".equals(account) && "21232F297A57A5A743894A0E4A801FC3".equalsIgnoreCase(DigestUtils.md5Hex(password)))
 		{
-		    /**
+
 			User user = new User();
 			user.setUsername("admin");
-			user.setPassword("admin");
+			//user.setPassword("admin");
 			user.setAge(18);
 			map.put("loginUser", user);
-             **/
+
 			map.put("result", "yes");
 
             SimpleDateFormat sdf  = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
