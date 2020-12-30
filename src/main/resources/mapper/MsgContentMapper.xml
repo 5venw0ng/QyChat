@@ -84,7 +84,7 @@
 		<if test="mc.fromDate != null &amp;&amp; mc.fromDate != ''">AND FROM_UNIXTIME(tmsg.msgtime/1000,'%Y-%m-%d %H:%i:%s') &gt; #{mc.fromDate}</if>
 		<if test="mc.thruDate != null &amp;&amp; mc.thruDate != ''">AND FROM_UNIXTIME(tmsg.msgtime/1000,'%Y-%m-%d %H:%i:%s') &gt; #{mc.thruDate}</if>
 
-		ORDER BY tmsg.msgtime limit #{page.pageNum},#{page.numPerPage}
+		ORDER BY tmsg.msgtime DESC limit #{page.pageNum},#{page.numPerPage}
 	</select>
 
 	<select id="counts" resultType="java.lang.Integer">

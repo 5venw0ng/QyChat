@@ -46,7 +46,7 @@ public class MsgContentServiceImpl implements MsgContentService {
 			msgList.addAll(groupmsgList);
 
 			pageBean = new PageBean(page.getPageNum(), page.getNumPerPage(), page.getCount(), msgList);
-			pageBean.setTotalCount(msgContentMapper.counts());
+			pageBean.setTotalCount(msgContentMapper.counts(mc));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -65,7 +65,7 @@ public class MsgContentServiceImpl implements MsgContentService {
 				msgContent.setMsgtype(EnumMsgType.getName(msgContent.getMsgtype()));
 			}
 			pageBean = new PageBean(page.getPageNum(), page.getNumPerPage(), page.getCount(), msgList);
-			pageBean.setTotalCount(msgContentMapper.counts());
+			pageBean.setTotalCount(msgContentMapper.counts(mc));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

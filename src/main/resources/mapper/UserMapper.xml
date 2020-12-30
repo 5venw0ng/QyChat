@@ -11,7 +11,7 @@
 	</resultMap>
 
 	<select id="queryAllUsers" resultMap="UserInfoMap">
-		SELECT * FROM tbl_user
+		SELECT * FROM tbl_user where id &lt;&gt; 999
 	</select>
 
 	<select id="getToken" resultMap="UserInfoMap">

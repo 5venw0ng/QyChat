@@ -11,7 +11,7 @@ package com.vocust.qywx.demo.utils;
 public enum EnumMsgType {
     TEXT("文本", "text"),
     IMAGE("图片", "image"),
-    EMOTION("表情 ", "emotion"),
+    EMOTION("表情", "emotion"),
     VOICE("语音", "voice"),
     VIDEO("视频", "video"),
     WEAPP("小程序", "weapp"),

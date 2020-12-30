@@ -22,7 +22,7 @@ public interface MsgContentMapper {
 
 	List<MsgContent> findMsgByUserid(@Param("page") PageParam page,@Param("mc") MsgContent mc);
 	
-	int counts();
+	int counts(@Param("mc") MsgContent mc);
 	
 	void insertMsgContent(MsgContent msgContent);
 

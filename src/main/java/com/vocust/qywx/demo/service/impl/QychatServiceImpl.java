@@ -66,7 +66,7 @@ public class QychatServiceImpl implements QychatService {
 	 * 每五分钟执行一次定时任务
 	 */
 	@Override
-	//@Scheduled(cron = "0 */1 * * * ?")
+	@Scheduled(cron = "0 */5 * * * ?")
 	public void initQychatData() {
 		QueryParam param = new QueryParam();
 		Integer seq = qychatMapper.getSeq() == null ? 0 : qychatMapper.getSeq();// 从第几条开始拉取
@@ -210,7 +210,8 @@ public class QychatServiceImpl implements QychatService {
 		} catch (Exception e) {
 			log.info("下载文件出错" + e);
 		}
-		return fileName.substring(0, fileName.lastIndexOf(".")) + ".mp3";//返回的时候给MP3
+
+		return fileName.contains(".amr") ? fileName.substring(0, fileName.lastIndexOf(".")) + ".mp3" : fileName;//返回的时候给MP3
 
 	}
 
